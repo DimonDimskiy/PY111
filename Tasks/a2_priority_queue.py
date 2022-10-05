@@ -7,16 +7,20 @@ from typing import Any
 
 
 class PriorityQueue:
-    def __init__(self):
-        ...  # todo для очереди можно использовать python dict
+
+    def __init__(self, priorities: int = 10):
+        self._priorities = priorities
+        self.data = {i: [] for i in range(self._priorities + 1)}  # todo для очереди можно использовать python dict
 
     def enqueue(self, elem: Any, priority: int = 0) -> None:
         """
         Operation that add element to the end of the queue
 
         :param elem: element to be added
+        :param priority: elements priority
         :return: Nothing
         """
+        self.data[priority].append(elem)
         return None
 
     def dequeue(self) -> Any:
@@ -25,7 +29,10 @@ class PriorityQueue:
 
         :return: dequeued element
         """
-        return None
+        for i in range(self._priorities + 1):
+            if self.data[i]:
+                return self.data[i].pop(0)
+
 
     def peek(self, ind: int = 0, priority: int = 0) -> Any:
         """
@@ -34,6 +41,9 @@ class PriorityQueue:
         :param ind: index of element (count from the beginning)
         :return: peeked element
         """
+        if priority in self.data:
+            if ind < len(self.data[priority]):
+                return self.data[priority][ind]
         return None
 
     def clear(self) -> None:
@@ -42,4 +52,13 @@ class PriorityQueue:
 
         :return: None
         """
+        for i in self.data:
+            self.data[i].clear()
         return None
+
+if __name__ == "__main__":
+    my_q = PriorityQueue()
+    my_q.enqueue(1)
+    my_q.enqueue(2)
+    print(my_q.data)
+    print(my_q.dequeue())
